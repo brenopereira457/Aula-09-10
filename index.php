@@ -30,6 +30,10 @@
 
         <button type="submit">Entrar</button>
     </form>
+    <!-- Adicionando nova linha para o usuario que esquece a senha -->
+     <br>
+     <a href="esqueci_senha.php">Esqueci a senha </a>
+     
     <br>
     <a href="registro.php"><button type="button">Cadastrar</a>
 </body>
