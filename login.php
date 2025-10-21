@@ -1,28 +1,37 @@
 <?php
-session_start();
-include("conexao.php");
+    session_start();
+    require_once "conexao.php";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $senha = $_POST['senha'];
-
-    // Buscando o determinado usuário no Banco de Dados
-    $sql = "SELECT * FROM usuarios WHERE email='$email' LIMIT 1";
-    $result = $conn -> query($sql);
-
-    if ($result -> num_rows > 0) {
-        $usuario = $result -> fetch_assoc();
-
-        // Verificando a senha com Hash (password_hash)
-        if (password_verify($senha, $usuario['senha'])) {
-            $_SESSION['usuario'] = $usuario['nome'];
-            header("Location: resultado.php");
-            exit();
-        } else {
-            echo "Senha incorreta. <a href='index.php'>Tentar novamente</a>";
-        }
-    } else {
-        echo "Usuário não encontrado. <a href='index.php'>Voltar</a>";
+    if ($_SERVER['RESQUEST_METHOD'] !== 'POST') {
+        header('Location: index.php');
+        exit;
     }
-}
-?>
+
+    $email = trim($_POST['email'] ?? '');
+    $senha = $_POST['senha'] ?? '';
+    $next = trim($_POST['next'] ?? 'perfil.php');
+
+    if ($email === '' || $senha === '') {
+        header ('Location: index.php?erro=' . urlencode("Preencha e-mail e senha"));
+        exit;
+    }
+
+    $stmt = $conn->prepare("SELECT id, nome, email, senha FROM usuarios WHERE email = ? LIMIT 1");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result && $row = $result-> fetch_assoc()) {
+        if (password_verify($senha, $row['senha'])){
+            $_SESSION['usuario_id'] = (int)$row['id'];
+            $_SESSION['usuario_nome'] = $row['nome'];
+            $_SESSION['usuario_email'] = $row['email'];
+
+            header('Locatio: ' . $next);
+            exit;
+        }
+    }
+
+    header('Location: index.php?erro=' . urlencode('E-mail ou senha inváludos.'));
+    exit;
+    ?>
