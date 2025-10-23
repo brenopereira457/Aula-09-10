@@ -2,7 +2,7 @@
     session_start();
     require_once "conexao.php";
 
-    if ($_SERVER['RESQUEST_METHOD'] !== 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         header('Location: index.php');
         exit;
     }
@@ -12,7 +12,7 @@
     $next = trim($_POST['next'] ?? 'perfil.php');
 
     if ($email === '' || $senha === '') {
-        header ('Location: index.php?erro=' . urlencode("Preencha e-mail e senha"));
+        header ('Location: index.php?erro' . urlencode("Preencha e-mail e senha"));
         exit;
     }
 
@@ -27,11 +27,11 @@
             $_SESSION['usuario_nome'] = $row['nome'];
             $_SESSION['usuario_email'] = $row['email'];
 
-            header('Locatio: ' . $next);
+            header('Location: ' . $next);
             exit;
         }
     }
 
-    header('Location: index.php?erro=' . urlencode('E-mail ou senha inváludos.'));
+    header('Location: index.php?erro=' . urlencode('E-mail ou senha inválidos.'));
     exit;
     ?>

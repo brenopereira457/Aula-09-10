@@ -1,8 +1,6 @@
 <?php
 session_start();
-include("conexao.php");
-
-$mensagem = "";
+require_once "conexao.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim($_POST['email'] ?? "");
@@ -52,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <body>
     <h1>Redefinir a senha</h1>
 
-    <?php if (!empty($message)) : ?>
+    <?php if (!empty($mensagem)) : ?>
         <p><?= $mensagem ?></p>
     <?php endif; ?>
 
