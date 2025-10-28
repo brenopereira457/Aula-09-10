@@ -34,4 +34,6 @@
 
     header('Location: index.php?erro=' . urlencode('E-mail ou senha inválidos.'));
     exit;
+
+    
     ?>
